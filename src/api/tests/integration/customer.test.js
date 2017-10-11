@@ -43,7 +43,7 @@ describe('Customers API', async () => {
         email: 'masteraccout@bank.com',
         password: passwordHashed,
         name: 'Master Account',
-        role: 'master',
+        role: 'admin',
       },
       jonSnow: {
         email: 'jhondoe@gmail.com',
@@ -62,7 +62,7 @@ describe('Customers API', async () => {
       email: 'martin.mucito@gmail.com',
       password,
       name: 'Master Account',
-      role: 'master',
+      role: 'admin',
     };
 
     await Customer.remove({});

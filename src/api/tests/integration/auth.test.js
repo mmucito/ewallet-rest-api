@@ -20,7 +20,7 @@ describe('Authentication API', () => {
       email: 'masteraccout@bank.com',
       password: 'mypassword',
       name: 'Master Account',
-      role: 'master',
+      role: 'admin',
     };
 
     customer = {

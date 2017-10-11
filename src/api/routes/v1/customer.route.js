@@ -57,6 +57,7 @@ router
    * @apiParam  {String=customer,admin}  [role]    Customer's role
    *
    * @apiSuccess (Created 201) {String}  id         Customer's id
+   * @apiSuccess {Number}  accountNumber         Customer's accountNumber
    * @apiSuccess (Created 201) {String}  name       Customer's name
    * @apiSuccess (Created 201) {String}  email      Customer's email
    * @apiSuccess (Created 201) {String}  role       Customer's role
@@ -82,6 +83,7 @@ router
    * @apiHeader {String} Athorization  Customer's access token
    *
    * @apiSuccess {String}  id         Customer's id
+   * @apiSuccess {Number}  accountNumber         Customer's accountNumber
    * @apiSuccess {String}  name       Customer's name
    * @apiSuccess {String}  email      Customer's email
    * @apiSuccess {String}  role       Customer's role
@@ -105,6 +107,7 @@ router
    * @apiHeader {String} Athorization  Customer's access token
    *
    * @apiSuccess {String}  id         Customer's id
+   * @apiSuccess {Number}  accountNumber         Customer's accountNumber
    * @apiSuccess {String}  name       Customer's name
    * @apiSuccess {String}  email      Customer's email
    * @apiSuccess {String}  role       Customer's role
@@ -132,6 +135,7 @@ router
    * (You must be an admin to change the customer's role)
    *
    * @apiSuccess {String}  id         Customer's id
+   * @apiSuccess {Number}  accountNumber         Customer's accountNumber
    * @apiSuccess {String}  name       Customer's name
    * @apiSuccess {String}  email      Customer's email
    * @apiSuccess {String}  role       Customer's role
@@ -160,6 +164,7 @@ router
    * (You must be an admin to change the customer's role)
    *
    * @apiSuccess {String}  id         Customer's id
+   * @apiSuccess {Number}  accountNumber         Customer's accountNumber
    * @apiSuccess {String}  name       Customer's name
    * @apiSuccess {String}  email      Customer's email
    * @apiSuccess {String}  role       Customer's role

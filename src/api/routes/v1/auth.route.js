@@ -30,6 +30,7 @@ const router = express.Router();
  * @apiSuccess (Created 201) {String}  token.timezone      The server's Timezone
  *
  * @apiSuccess (Created 201) {String}  customer.id         Customer's id
+ * @apiSuccess (Created 201) {Number}  customer.accountNumber         Customer's accountNumber
  * @apiSuccess (Created 201) {String}  customer.name       Customer's name
  * @apiSuccess (Created 201) {String}  customer.email      Customer's email
  * @apiSuccess (Created 201) {String}  customer.role       Customer's role
@@ -60,6 +61,7 @@ router.route('/register')
  *                                                   in miliseconds
  *
  * @apiSuccess  {String}  customer.id             Customer's id
+ * @apiSuccess  {Number}  customer.accountNumber  Customer's accountNumber
  * @apiSuccess  {String}  customer.name           Customer's name
  * @apiSuccess  {String}  customer.email          Customer's email
  * @apiSuccess  {String}  customer.role           Customer's role

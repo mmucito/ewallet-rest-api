@@ -3,6 +3,14 @@ const Customer = require('../models/customer.model');
 
 module.exports = {
 
+  // POST /v1/wallet/deposit
+  walletDeposit: {
+    body: {
+      amount: Joi.number().positive().precision(2).min(10).max(50000).required(),
+      card: Joi.string().creditCard().required()
+    },
+  },
+
   // GET /v1/customers
   listCustomers: {
     query: {

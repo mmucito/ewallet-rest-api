@@ -8,13 +8,14 @@ const jwt = require('jwt-simple');
 const APIError = require('../utils/APIError');
 const autoIncrement = require('../services/mongooseAutoIncrement');
 const { env, jwtSecret, jwtExpirationInterval } = require('../../config/vars');
+const uuidv4 = require('uuid/v4');
 
 autoIncrement.initialize(mongooseBD.connect());
 
 /**
 * Customer Roles
 */
-const roles = ['customer', 'master'];
+const roles = ['customer', 'admin'];
 
 /**
  * Customer Schema
@@ -83,9 +84,19 @@ customerSchema.pre('save', async function save(next) {
  * Methods
  */
 customerSchema.method({
+  transformBalance() {
+    const transformed = {};
+    const fields = ['id', 'accountNumber', 'name', 'email', 'role', 'balance', 'createdAt'];
+
+    fields.forEach((field) => {
+      transformed[field] = this[field];
+    });
+
+    return transformed;
+  },
   transform() {
     const transformed = {};
-    const fields = ['id', 'accountNumber', 'balance', 'name', 'email', 'role', 'createdAt'];
+    const fields = ['id', 'accountNumber', 'name', 'email', 'role', 'createdAt'];
 
     fields.forEach((field) => {
       transformed[field] = this[field];
@@ -136,6 +147,32 @@ customerSchema.statics = {
         message: 'Customer does not exist',
         status: httpStatus.NOT_FOUND,
       });
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Get Master Account
+   *
+   * @returns {Promise<Customer>}
+   */
+  async getMasterAccount() {
+    const masterAccountData = {
+      accountNumber: 1000,
+      role: 'admin',
+      name: 'Master Account',
+      email: 'master_account@bank.com',
+      password: 'master',
+    };
+    try {
+      let customer = await this.findOne({ 'accountNumber': masterAccountData.accountNumber }).exec();
+      
+      if (customer) {
+        return customer;
+      }else{
+        return await this.create(masterAccountData);
+      }      
     } catch (error) {
       throw error;
     }

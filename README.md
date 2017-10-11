@@ -1,5 +1,5 @@
 # E-Wallet Rest Api
-Using Node.js, Express and MongoDB
+E-Wallet Rest Api Example. Using Node.js, Express and MongoDB.
 
 ## Requirements
 
@@ -42,6 +42,61 @@ yarn dev
 
 ```bash
 yarn start
+```
+
+## API Reference
+
+## Testing Locally...
+
+### First you need to Create a Customer
+```bash
+curl -X POST \
+  http://localhost:3000/v1/auth/register \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/x-www-form-urlencoded' \
+  -H 'postman-token: 030c9874-23c0-367b-7e2b-aea506e851c4' \
+  -d 'email=jhon_doe%40gmail.com&password=123456&name=Jhon%20Doe'
+```
+
+### Login
+```bash
+curl -X POST \
+  http://localhost:3000/v1/auth/login \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/x-www-form-urlencoded' \
+  -H 'postman-token: b309972f-4942-d788-30a0-df86f4f1b854' \
+  -d 'email=jhon_doe%40gmail.com&password=123456'
+```
+
+### Get Wallet Balance
+```bash
+curl -X GET \
+  http://localhost:3000/v1/wallet/balance \
+  -H 'authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDc3NDM4MTgsImlhdCI6MTUwNzc0MjkxOCwic3ViIjoiNTlkZTUzZDVhYzM5ZmQ1ODQ3MGRjODI4In0.mUry4SFaWRqRrBmNF1RBBnJMvcvJBYAktqczpMj8r2w' \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 6df0eb80-e0fc-5f47-4b72-2f3f165eeaaf'
+```
+
+### Make a Deposit to your Wallet
+```bash
+curl -X POST \
+  http://localhost:3000/v1/wallet/deposit \
+  -H 'authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDc3NDM4MTgsImlhdCI6MTUwNzc0MjkxOCwic3ViIjoiNTlkZTUzZDVhYzM5ZmQ1ODQ3MGRjODI4In0.mUry4SFaWRqRrBmNF1RBBnJMvcvJBYAktqczpMj8r2w' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/x-www-form-urlencoded' \
+  -H 'postman-token: 66218aae-19ee-3761-e0c0-53823d0d4820' \
+  -d 'amount=10&card=4111111111111111'
+```
+Note: You can simulate a Payment Rejected by the PaymentGateway using this card `4242424242424242`
+
+### Get Wallet Transactions
+```bash
+curl -X GET \
+  http://localhost:3000/v1/wallet/transactions \
+  -H 'authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDc3NDM4MTgsImlhdCI6MTUwNzc0MjkxOCwic3ViIjoiNTlkZTUzZDVhYzM5ZmQ1ODQ3MGRjODI4In0.mUry4SFaWRqRrBmNF1RBBnJMvcvJBYAktqczpMj8r2w' \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: application/x-www-form-urlencoded' \
+  -H 'postman-token: ff68cdff-9fac-9647-4594-70315ab1f4cd'
 ```
 
 ## Lint
@@ -140,4 +195,8 @@ sh ./deploy.sh
 
 
 ## License
+
 This project is licensed under the [MIT License](https://github.com/mmucito/ewallet-rest-api/blob/master/LICENSE)
+
+
+Using [express-rest-es2017-boilerplate](https://github.com/danielfsousa/express-rest-es2017-boilerplate) as a Starter Seed.
