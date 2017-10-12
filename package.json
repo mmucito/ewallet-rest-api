@@ -11,9 +11,8 @@
     "yarn": "*"
   },
   "scripts": {
-    "preinstall": "yarn",
     "precommit": "yarn lint",
-    "prestart": "yarn docs",
+    "prestart": "yarn && yarn docs",
     "start": "cross-env NODE_ENV=production node ./node_modules/.bin/pm2 start ./src/index.js --attach",
     "dev": "nodemon ./src/index.js",
     "lint": "eslint **/*.js --ignore-path .gitignore --ignore-pattern internals/scripts",
