@@ -33,22 +33,22 @@ async function simulateGatewayCall(card, amount) {
     };
 }
 
-exports.debitCard = async (accountNumber, card, amount) => {
+exports.withdrawal = async (accountNumber, card, amount) => {
     const gatewayResponse = await simulateGatewayCall(card, amount);
     const gatewayTransaction = new GatewayTransaction(gatewayResponse);
     const savedGatewayTransaction = await gatewayTransaction.save();
     if(savedGatewayTransaction.status === 'failure'){
         throw new APIError({
-            message: 'Payment Rejected',
-            status: httpStatus.PAYMENT_REQUIRED,
+            message: 'Withdrawal Rejected',
+            status: httpStatus.BAD_GATEWAY,
           });
     }
 
     const transaction = new Transaction();
-    transaction.amount = amount;
-    transaction.operation = 'deposit';
+    transaction.amount = -amount;
+    transaction.operation = 'withdrawal';
     transaction.accountNumber = accountNumber;
-    transaction.reference = "payment_gateway_transaction:"+savedGatewayTransaction.transactionId;
+    transaction.reference = "withdrawal_gateway_transaction:"+savedGatewayTransaction.transactionId;
     const savedTransaction = await transaction.save();
     const savedCustomer = await Customer.findOne({ 'accountNumber': accountNumber });
     const response = { transaction: transaction.transform(), customer: savedCustomer.transformBalance() }

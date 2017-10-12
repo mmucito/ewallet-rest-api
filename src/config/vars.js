@@ -11,6 +11,8 @@ module.exports = {
   port: process.env.PORT,
   jwtSecret: process.env.JWT_SECRET,
   jwtExpirationInterval: process.env.JWT_EXPIRATION_MINUTES,
+  masterAccount: process.env.MASTER_ACCOUNT_NUMBER,
+  masterAccountPassword: process.env.MASTER_ACCOUNT_PASSWORD,
   mongo: {
     uri: process.env.NODE_ENV === 'test'
       ? process.env.MONGO_URI_TESTS

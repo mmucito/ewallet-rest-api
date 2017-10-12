@@ -3,7 +3,15 @@ const Customer = require('../models/customer.model');
 
 module.exports = {
 
-  // POST /v1/wallet/deposit
+  // POST /v1/ewallet/transfer
+  walletTransfer: {
+    body: {
+      amount: Joi.number().positive().precision(2).min(10).max(50000).required(),
+      destinationAccountNumber: Joi.number().required()
+    },
+  },
+
+  // POST /v1/ewallet/deposit
   walletDeposit: {
     body: {
       amount: Joi.number().positive().precision(2).min(10).max(50000).required(),

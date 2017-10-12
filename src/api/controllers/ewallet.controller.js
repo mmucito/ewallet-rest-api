@@ -3,6 +3,8 @@ const { omit } = require('lodash');
 const Customer = require('../models/customer.model');
 const Transaction = require('../models/transaction.model');
 const paymentService = require('../services/paymentService');
+const withdrawalService = require('../services/withdrawalService');
+const transferService = require('../services/transferService');
 const { handler: errorHandler } = require('../middlewares/error');
 
 
@@ -28,24 +30,45 @@ exports.getTransactions = async (req, res, next) => {
 };
 
 /**
- * Wallet Deposit
+ * eWallet Deposit
  * @public
  */
 exports.deposit = async (req, res, next) => {
   try {
 
-    const paymentResponse = await paymentService.debitCard(req.body.card, req.body.amount);
-
-    const transaction = new Transaction();
-    transaction.amount = req.body.amount;
-    transaction.operation = 'deposit';
-    transaction.accountNumber = req.customer.accountNumber;
-    transaction.reference = "gatewayTransaction_"+paymentResponse.transactionId;
-    const savedTransaction = await transaction.save();
-    const savedCustomer = await Customer.findById(req.customer._id);
-    const response = { transaction: savedTransaction.transform(), customer: savedCustomer.transformBalance() }    
-    res.json(response);
+    const paymentResponse = await paymentService.debitCard(req.customer.accountNumber, req.body.card, req.body.amount);        
+    res.json(paymentResponse);    
     
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * eWallet Transfer
+ * @public
+ */
+exports.transfer = async (req, res, next) => {
+  try {
+    console.log('mio1------');
+    console.log(req.body);
+    const transferResponse = await transferService.transfer(req.customer.accountNumber, req.body.amount, req.body.destinationAccountNumber);    
+    res.json(transferResponse);    
+    
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * eWallet Withdrawal
+ * @public
+ */
+exports.withdrawal = async (req, res, next) => {
+  try {
+
+    const withdrawalResponse = await withdrawalService.withdrawal(req.customer.accountNumber, req.body.card, req.body.amount);        
+    res.json(withdrawalResponse);    
     
   } catch (error) {
     next(error);

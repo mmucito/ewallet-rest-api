@@ -68,7 +68,7 @@ transactionSchema.post('save', async function save(doc, next) {
     }
 
 
-    if(this.wasNew && this.operation === 'transfer'){
+    if(this.wasNew && this.operation === 'transfer' && this.amount < 0){
       let fee = 0;
       let tempAmount = Math.abs(this.amount);
 
@@ -89,7 +89,7 @@ transactionSchema.post('save', async function save(doc, next) {
         transFee.amount = transFee.amount.toFixed(2);
         transFee.operation = 'fee';
         transFee.accountNumber = this.accountNumber;
-        transFee.reference = 'transaction_' + this._id;
+        transFee.reference = 'fee_from_transaction:' + this._id;
         const savedTransFee = await transFee.save();
 
         const masterAccount = await Customer.getMasterAccount();   

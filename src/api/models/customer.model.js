@@ -7,7 +7,7 @@ const moment = require('moment-timezone');
 const jwt = require('jwt-simple');
 const APIError = require('../utils/APIError');
 const autoIncrement = require('../services/mongooseAutoIncrement');
-const { env, jwtSecret, jwtExpirationInterval } = require('../../config/vars');
+const { env, jwtSecret, jwtExpirationInterval, masterAccount, masterAccountPassword } = require('../../config/vars');
 const uuidv4 = require('uuid/v4');
 
 autoIncrement.initialize(mongooseBD.connect());
@@ -159,11 +159,11 @@ customerSchema.statics = {
    */
   async getMasterAccount() {
     const masterAccountData = {
-      accountNumber: 1000,
+      accountNumber: masterAccount,
       role: 'admin',
       name: 'Master Account',
       email: 'master_account@bank.com',
-      password: 'master',
+      password: masterAccountPassword,
     };
     try {
       let customer = await this.findOne({ 'accountNumber': masterAccountData.accountNumber }).exec();
