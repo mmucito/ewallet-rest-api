@@ -45,6 +45,7 @@ yarn start
 ```
 
 ## API Reference
+https://ewallet-rest-api.herokuapp.com/v1/docs/
 
 ## Testing Locally...
 
@@ -166,18 +167,6 @@ yarn lint:fix
 ```bash
 # run all tests with Mocha
 yarn test
-
-# run unit tests
-yarn test:unit
-
-# run integration tests
-yarn test:integration
-
-# run all tests and watch for changes
-yarn test:watch
-
-# open nyc test coverage reports
-yarn coverage
 ```
 
 ## Validate

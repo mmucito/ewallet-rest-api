@@ -12,8 +12,8 @@
   },
   "scripts": {
     "precommit": "yarn lint",
-    "prestart": "yarn docs",
-    "start": "cross-env NODE_ENV=production pm2 start ./src/index.js",
+    "prestart": "yarn && yarn docs",
+    "start": "cross-env NODE_ENV=production node ./node_modules/.bin/pm2 start ./src/index.js --attach",
     "dev": "nodemon ./src/index.js",
     "lint": "eslint **/*.js --ignore-path .gitignore --ignore-pattern internals/scripts",
     "lint:fix": "yarn lint -- --fix",
@@ -86,7 +86,7 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "apidoc": "^0.17.5",
+    "apidoc": "^0.17.6",
     "chai": "^4.1.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.0",
