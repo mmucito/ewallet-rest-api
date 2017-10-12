@@ -11,6 +11,7 @@
     "yarn": "*"
   },
   "scripts": {
+    "preinstall": "yarn",
     "precommit": "yarn lint",
     "prestart": "yarn docs",
     "start": "cross-env NODE_ENV=production node ./node_modules/.bin/pm2 start ./src/index.js --attach",
