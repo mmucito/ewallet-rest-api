@@ -6,7 +6,6 @@ const sinon = require('sinon');
 const app = require('../../../index');
 const Customer = require('../../models/customer.model');
 const RefreshToken = require('../../models/refreshToken.model');
-const authProviders = require('../../services/authProviders');
 
 const sandbox = sinon.createSandbox();
 
@@ -20,12 +19,14 @@ describe('Authentication API', () => {
       email: 'masteraccout@bank.com',
       password: 'mypassword',
       name: 'Master Account',
+      accountNumber: 1000,
       role: 'admin',
     };
 
     customer = {
       email: 'martin.mucito@gmail.com',
       password: '123456',
+      accountNumber: 1001,
       name: 'Martin Mucito',
     };
 

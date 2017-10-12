@@ -49,9 +49,7 @@ exports.deposit = async (req, res, next) => {
  * @public
  */
 exports.transfer = async (req, res, next) => {
-  try {
-    console.log('mio1------');
-    console.log(req.body);
+  try {    
     const transferResponse = await transferService.transfer(req.customer.accountNumber, req.body.amount, req.body.destinationAccountNumber);    
     res.json(transferResponse);    
     

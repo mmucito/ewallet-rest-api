@@ -39,15 +39,17 @@ describe('Customers API', async () => {
 
   beforeEach(async () => {    
     dbCustomers = {
-      branStark: {
-        email: 'masteraccout@bank.com',
+      masterAccount: {
+        email: 'master_account@bank.com',
         password: passwordHashed,
         name: 'Master Account',
+        accountNumber: 1000,
         role: 'admin',
       },
-      jonSnow: {
+      jhonDoe: {
         email: 'jhondoe@gmail.com',
         password: passwordHashed,
+        accountNumber: 1003,
         name: 'Jhon Doe',
       },
     };
@@ -55,22 +57,24 @@ describe('Customers API', async () => {
     customer = {
       email: 'martin.mucito@gmail.com',
       password,
+      accountNumber: 1001,
       name: 'Martín Mucito',
     };
 
     admin = {
-      email: 'martin.mucito@gmail.com',
+      email: 'master_account2@bank.com',
       password,
       name: 'Master Account',
+      accountNumber: 999,
       role: 'admin',
     };
 
     await Customer.remove({});
-    await Customer.insertMany([dbCustomers.branStark, dbCustomers.jonSnow]);
-    dbCustomers.branStark.password = password;
-    dbCustomers.jonSnow.password = password;
-    adminAccessToken = (await Customer.findAndGenerateToken(dbCustomers.branStark)).accessToken;
-    customerAccessToken = (await Customer.findAndGenerateToken(dbCustomers.jonSnow)).accessToken;
+    await Customer.insertMany([dbCustomers.masterAccount, dbCustomers.jhonDoe]);
+    dbCustomers.masterAccount.password = password;
+    dbCustomers.jhonDoe.password = password;
+    adminAccessToken = (await Customer.findAndGenerateToken(dbCustomers.masterAccount)).accessToken;
+    customerAccessToken = (await Customer.findAndGenerateToken(dbCustomers.jhonDoe)).accessToken;
   });
 
   describe('POST /v1/customers', () => {
@@ -98,7 +102,7 @@ describe('Customers API', async () => {
     });
 
     it('should report error when email already exists', () => {
-      customer.email = dbCustomers.branStark.email;
+      customer.email = dbCustomers.masterAccount.email;
 
       return request(app)
         .post('/v1/customers')
@@ -171,11 +175,11 @@ describe('Customers API', async () => {
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.OK)
         .then(async (res) => {
-          const bran = format(dbCustomers.branStark);
-          const john = format(dbCustomers.jonSnow);
+          const bran = format(dbCustomers.masterAccount);
+          const john = format(dbCustomers.jhonDoe);
 
-          const includesBranStark = some(res.body, bran);
-          const includesjonSnow = some(res.body, john);
+          const includesmasterAccount = some(res.body, bran);
+          const includesjhonDoe = some(res.body, john);
 
           // before comparing it is necessary to convert String to Date
           res.body[0].createdAt = new Date(res.body[0].createdAt);
@@ -183,8 +187,8 @@ describe('Customers API', async () => {
 
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.lengthOf(2);
-          expect(includesBranStark).to.be.true;
-          expect(includesjonSnow).to.be.true;
+          expect(includesmasterAccount).to.be.true;
+          expect(includesjhonDoe).to.be.true;
         });
     });
 
@@ -195,16 +199,16 @@ describe('Customers API', async () => {
         .query({ page: 2, perPage: 1 })
         .expect(httpStatus.OK)
         .then((res) => {
-          delete dbCustomers.jonSnow.password;
-          const john = format(dbCustomers.jonSnow);
-          const includesjonSnow = some(res.body, john);
+          delete dbCustomers.jhonDoe.password;
+          const john = format(dbCustomers.jhonDoe);
+          const includesjhonDoe = some(res.body, john);
 
           // before comparing it is necessary to convert String to Date
           res.body[0].createdAt = new Date(res.body[0].createdAt);
 
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.lengthOf(1);
-          expect(includesjonSnow).to.be.true;
+          expect(includesjhonDoe).to.be.true;
         });
     });
 
@@ -212,19 +216,19 @@ describe('Customers API', async () => {
       return request(app)
         .get('/v1/customers')
         .set('Authorization', `Bearer ${adminAccessToken}`)
-        .query({ email: dbCustomers.jonSnow.email })
+        .query({ email: dbCustomers.jhonDoe.email })
         .expect(httpStatus.OK)
         .then((res) => {
-          delete dbCustomers.jonSnow.password;
-          const john = format(dbCustomers.jonSnow);
-          const includesjonSnow = some(res.body, john);
+          delete dbCustomers.jhonDoe.password;
+          const john = format(dbCustomers.jhonDoe);
+          const includesjhonDoe = some(res.body, john);
 
           // before comparing it is necessary to convert String to Date
           res.body[0].createdAt = new Date(res.body[0].createdAt);
 
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.lengthOf(1);
-          expect(includesjonSnow).to.be.true;
+          expect(includesjhonDoe).to.be.true;
         });
     });
 
@@ -268,14 +272,14 @@ describe('Customers API', async () => {
   describe('GET /v1/customers/:customerId', () => {
     it('should get customer', async () => {
       const id = (await Customer.findOne({}))._id;
-      delete dbCustomers.branStark.password;
+      delete dbCustomers.masterAccount.password;
 
       return request(app)
         .get(`/v1/customers/${id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body).to.include(dbCustomers.branStark);
+          expect(res.body).to.include(dbCustomers.masterAccount);
         });
     });
 
@@ -302,7 +306,7 @@ describe('Customers API', async () => {
     });
 
     it('should report error when logged customer is not the same as the requested one', async () => {
-      const id = (await Customer.findOne({ email: dbCustomers.branStark.email }))._id;
+      const id = (await Customer.findOne({ email: dbCustomers.masterAccount.email }))._id;
 
       return request(app)
         .get(`/v1/customers/${id}`)
@@ -317,8 +321,8 @@ describe('Customers API', async () => {
 
   describe('PUT /v1/customers/:customerId', () => {
     it('should replace customer', async () => {
-      delete dbCustomers.branStark.password;
-      const id = (await Customer.findOne(dbCustomers.branStark))._id;
+      delete dbCustomers.masterAccount.password;
+      const id = (await Customer.findOne(dbCustomers.masterAccount))._id;
 
       return request(app)
         .put(`/v1/customers/${id}`)
@@ -382,7 +386,7 @@ describe('Customers API', async () => {
     });
 
     it('should report error when logged customer is not the same as the requested one', async () => {
-      const id = (await Customer.findOne({ email: dbCustomers.branStark.email }))._id;
+      const id = (await Customer.findOne({ email: dbCustomers.masterAccount.email }))._id;
 
       return request(app)
         .put(`/v1/customers/${id}`)
@@ -395,7 +399,7 @@ describe('Customers API', async () => {
     });
 
     it('should not replace the role of the customer (not admin)', async () => {
-      const id = (await Customer.findOne({ email: dbCustomers.jonSnow.email }))._id;
+      const id = (await Customer.findOne({ email: dbCustomers.jhonDoe.email }))._id;
       const role = 'admin';
 
       return request(app)
@@ -411,8 +415,8 @@ describe('Customers API', async () => {
 
   describe('PATCH /v1/customers/:customerId', () => {
     it('should update customer', async () => {
-      delete dbCustomers.branStark.password;
-      const id = (await Customer.findOne(dbCustomers.branStark))._id;
+      delete dbCustomers.masterAccount.password;
+      const id = (await Customer.findOne(dbCustomers.masterAccount))._id;
       const { name } = customer;
 
       return request(app)
@@ -422,13 +426,13 @@ describe('Customers API', async () => {
         .expect(httpStatus.OK)
         .then((res) => {
           expect(res.body.name).to.be.equal(name);
-          expect(res.body.email).to.be.equal(dbCustomers.branStark.email);
+          expect(res.body.email).to.be.equal(dbCustomers.masterAccount.email);
         });
     });
 
     it('should not update customer when no parameters were given', async () => {
-      delete dbCustomers.branStark.password;
-      const id = (await Customer.findOne(dbCustomers.branStark))._id;
+      delete dbCustomers.masterAccount.password;
+      const id = (await Customer.findOne(dbCustomers.masterAccount))._id;
 
       return request(app)
         .patch(`/v1/customers/${id}`)
@@ -436,7 +440,7 @@ describe('Customers API', async () => {
         .send()
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body).to.include(dbCustomers.branStark);
+          expect(res.body).to.include(dbCustomers.masterAccount);
         });
     });
 
@@ -452,7 +456,7 @@ describe('Customers API', async () => {
     });
 
     it('should report error when logged customer is not the same as the requested one', async () => {
-      const id = (await Customer.findOne({ email: dbCustomers.branStark.email }))._id;
+      const id = (await Customer.findOne({ email: dbCustomers.masterAccount.email }))._id;
 
       return request(app)
         .patch(`/v1/customers/${id}`)
@@ -465,7 +469,7 @@ describe('Customers API', async () => {
     });
 
     it('should not update the role of the customer (not admin)', async () => {
-      const id = (await Customer.findOne({ email: dbCustomers.jonSnow.email }))._id;
+      const id = (await Customer.findOne({ email: dbCustomers.jhonDoe.email }))._id;
       const role = 'admin';
 
       return request(app)
@@ -506,7 +510,7 @@ describe('Customers API', async () => {
     });
 
     it('should report error when logged customer is not the same as the requested one', async () => {
-      const id = (await Customer.findOne({ email: dbCustomers.branStark.email }))._id;
+      const id = (await Customer.findOne({ email: dbCustomers.masterAccount.email }))._id;
 
       return request(app)
         .delete(`/v1/customers/${id}`)
@@ -521,21 +525,21 @@ describe('Customers API', async () => {
 
   describe('GET /v1/customers/profile', () => {
     it('should get the logged customer\'s info', () => {
-      delete dbCustomers.jonSnow.password;
+      delete dbCustomers.jhonDoe.password;
 
       return request(app)
         .get('/v1/customers/profile')
         .set('Authorization', `Bearer ${customerAccessToken}`)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body).to.include(dbCustomers.jonSnow);
+          expect(res.body).to.include(dbCustomers.jhonDoe);
         });
     });
 
     it('should report error without stacktrace when accessToken is expired', async () => {
       // fake time
       const clock = sinon.useFakeTimers();
-      const expiredAccessToken = (await Customer.findAndGenerateToken(dbCustomers.branStark)).accessToken;
+      const expiredAccessToken = (await Customer.findAndGenerateToken(dbCustomers.masterAccount)).accessToken;
 
       // move clock forward by minutes set in config + 1 minute
       clock.tick((JWT_EXPIRATION * 60000) + 60000);

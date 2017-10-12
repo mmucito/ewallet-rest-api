@@ -129,6 +129,7 @@ curl -X POST \
   -H 'postman-token: d2292d62-cefd-e7b9-311a-12fe92795c79' \
   -d 'amount=1500&card=4111111111111111'
 ```
+Note: You can simulate a Failure on the Withdrawal Gateway using this card `4242424242424242`
 
 ## <a name="masteraccount"></a>Master Account Info
 ### Login
@@ -158,9 +159,6 @@ yarn lint
 
 # try to fix ESLint errors
 yarn lint:fix
-
-# lint and watch for changes
-yarn lint:watch
 ```
 
 ## Test
