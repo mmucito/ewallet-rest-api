@@ -12,7 +12,7 @@
   },
   "scripts": {
     "precommit": "yarn lint",
-    "prestart": "yarn && yarn docs",
+    "prestart": "yarn docs",
     "start": "nodemon ./src/index.js",
     "lint": "eslint **/*.js --ignore-path .gitignore --ignore-pattern internals/scripts",
     "lint:fix": "yarn lint -- --fix",
