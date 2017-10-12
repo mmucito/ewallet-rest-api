@@ -11,9 +11,11 @@
     "yarn": "*"
   },
   "scripts": {
+    "preinstall": "npm install pm2 -g && yarn",
     "precommit": "yarn lint",
     "prestart": "yarn docs",
-    "start": "nodemon ./src/index.js",
+    "start": "cross-env NODE_ENV=production pm2 start ./src/index.js --attach",
+    "dev": "nodemon ./src/index.js",
     "lint": "eslint **/*.js --ignore-path .gitignore --ignore-pattern internals/scripts",
     "lint:fix": "yarn lint -- --fix",
     "lint:watch": "yarn lint -- --watch",
