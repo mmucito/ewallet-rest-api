@@ -1,0 +1,344 @@
+{
+	"info": {
+		"name": "ewallet",
+		"_postman_id": "dd65e1e8-8a12-cea5-f480-8ffa7bba4a95",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "jhon_doe@gmail.com",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "name",
+							"value": "Jhon Doe",
+							"type": "text",
+							"description": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "https://ewallet-rest-api.herokuapp.com/v1/auth/register",
+					"protocol": "https",
+					"host": [
+						"ewallet-rest-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"v1",
+						"auth",
+						"register"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "jhon_doe@gmail.com",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text",
+							"description": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "https://ewallet-rest-api.herokuapp.com/v1/auth/login",
+					"protocol": "https",
+					"host": [
+						"ewallet-rest-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"v1",
+						"auth",
+						"login"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ewallet/balance",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDc3NjUzMzMsImlhdCI6MTUwNzc2NDQzMywic3ViIjoiNTlkZWE4ZDA2YzkyYmQ2ZTdkZjZiMzMwIn0.ASsqlu0g-IzT0IlLyoQAORgJI_QLqI__2hsZ95P3-Ro",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://ewallet-rest-api.herokuapp.com/v1/ewallet/balance",
+					"protocol": "https",
+					"host": [
+						"ewallet-rest-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"v1",
+						"ewallet",
+						"balance"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ewallet/deposit",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDc4NzA3NTcsImlhdCI6MTUwNzg2OTg1Nywic3ViIjoiNTllMDQ0OGI5ZDNlZmEwMDhiOGFlMTIyIn0.o0SJNqLB2x-mHClztCphc194MnF-a4q0R49grIp1vOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "amount",
+							"value": "10000",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "card",
+							"value": "4111111111111111",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://ewallet-rest-api.herokuapp.com/v1/ewallet/deposit",
+					"protocol": "https",
+					"host": [
+						"ewallet-rest-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"v1",
+						"ewallet",
+						"deposit"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ewallet/transfer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDc4NzA3NTcsImlhdCI6MTUwNzg2OTg1Nywic3ViIjoiNTllMDQ0OGI5ZDNlZmEwMDhiOGFlMTIyIn0.o0SJNqLB2x-mHClztCphc194MnF-a4q0R49grIp1vOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "amount",
+							"value": "1000",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "destinationAccountNumber",
+							"value": "1001",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://ewallet-rest-api.herokuapp.com/v1/ewallet/transfer",
+					"protocol": "https",
+					"host": [
+						"ewallet-rest-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"v1",
+						"ewallet",
+						"transfer"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ewallet/withdrawal",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDc4NzA3NTcsImlhdCI6MTUwNzg2OTg1Nywic3ViIjoiNTllMDQ0OGI5ZDNlZmEwMDhiOGFlMTIyIn0.o0SJNqLB2x-mHClztCphc194MnF-a4q0R49grIp1vOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "amount",
+							"value": "2000",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "card",
+							"value": "4111111111111111",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://ewallet-rest-api.herokuapp.com/v1/ewallet/withdrawal",
+					"protocol": "https",
+					"host": [
+						"ewallet-rest-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"v1",
+						"ewallet",
+						"withdrawal"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ewallet/transactions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDc4NzA3NTcsImlhdCI6MTUwNzg2OTg1Nywic3ViIjoiNTllMDQ0OGI5ZDNlZmEwMDhiOGFlMTIyIn0.o0SJNqLB2x-mHClztCphc194MnF-a4q0R49grIp1vOk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "https://ewallet-rest-api.herokuapp.com/v1/ewallet/transactions",
+					"protocol": "https",
+					"host": [
+						"ewallet-rest-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"v1",
+						"ewallet",
+						"transactions"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

@@ -47,6 +47,12 @@ yarn start
 ## API Reference
 https://ewallet-rest-api.herokuapp.com/v1/docs/
 
+## API Endpoint
+https://ewallet-rest-api.herokuapp.com/
+
+## API Postman Collection for Testing
+https://github.com/mmucito/ewallet-rest-api/blob/master/ewallet.postman_collection.json
+
 ## Testing Locally...
 
 ### First you need to Create a Customer
