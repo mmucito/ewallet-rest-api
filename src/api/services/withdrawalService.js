@@ -7,12 +7,7 @@ const httpStatus = require('http-status');
 const Customer = require('../models/customer.model');
 const Transaction = require('../models/transaction.model');
 
-async function sleep(ms){
-    return new Promise(r => setTimeout(r, ms));
-}
-
 async function simulateGatewayCall(card, amount) {
-    await sleep(3000);
     
     let status = 'success';
     if(card === '4242424242424242'){
@@ -52,6 +47,5 @@ exports.withdrawal = async (accountNumber, card, amount) => {
     const savedTransaction = await transaction.save();
     const savedCustomer = await Customer.findOne({ 'accountNumber': accountNumber });
     const response = { transaction: transaction.transform(), customer: savedCustomer.transformBalance() }
-    
     return response;
   };

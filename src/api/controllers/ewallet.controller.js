@@ -35,7 +35,6 @@ exports.getTransactions = async (req, res, next) => {
  */
 exports.deposit = async (req, res, next) => {
   try {
-
     const paymentResponse = await paymentService.debitCard(req.customer.accountNumber, req.body.card, req.body.amount);        
     res.json(paymentResponse);    
     
@@ -64,7 +63,6 @@ exports.transfer = async (req, res, next) => {
  */
 exports.withdrawal = async (req, res, next) => {
   try {
-
     const withdrawalResponse = await withdrawalService.withdrawal(req.customer.accountNumber, req.body.card, req.body.amount);        
     res.json(withdrawalResponse);    
     

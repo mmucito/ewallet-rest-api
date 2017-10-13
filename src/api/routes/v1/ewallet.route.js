@@ -82,7 +82,7 @@ router
    *
    * @apiSuccess {Object}  transaction       Transaction.
    * @apiSuccess  {String}  transaction.id     Transaction's id
-   * @apiSuccess  {String}  transaction.accountNumber   Transaction's accountNumber
+   * @apiSuccess  {Number}  transaction.accountNumber   Transaction's accountNumber
    * @apiSuccess  {Number}  transaction.destinationAccountNumber   Transaction's destinationAccountNumber
    * @apiSuccess  {String}  transaction.operation  Transaction's type of operation (deposit, withdrawal, transfer, fee)
    * @apiSuccess  {Number}  transaction.amount     Transaction's amount
@@ -120,7 +120,7 @@ router
    *
    * @apiSuccess {Object}  transaction       Transaction.
    * @apiSuccess  {String}  transaction.id     Transaction's id
-   * @apiSuccess  {String}  transaction.accountNumber   Transaction's accountNumber
+   * @apiSuccess  {Number}  transaction.accountNumber   Transaction's accountNumber
    * @apiSuccess  {Number}  transaction.destinationAccountNumber   Transaction's destinationAccountNumber
    * @apiSuccess  {String}  transaction.operation  Transaction's type of operation (deposit, withdrawal, transfer, fee)
    * @apiSuccess  {Number}  transaction.amount     Transaction's amount
@@ -158,7 +158,7 @@ router
    *
    * @apiSuccess {Object}  transaction       Transaction.
    * @apiSuccess  {String}  transaction.id     Transaction's id
-   * @apiSuccess  {String}  transaction.accountNumber   Transaction's accountNumber
+   * @apiSuccess  {Number}  transaction.accountNumber   Transaction's accountNumber
    * @apiSuccess  {Number}  transaction.destinationAccountNumber   Transaction's destinationAccountNumber
    * @apiSuccess  {String}  transaction.operation  Transaction's type of operation (deposit, withdrawal, transfer, fee)
    * @apiSuccess  {Number}  transaction.amount     Transaction's amount

@@ -8,6 +8,7 @@ const bcrypt = require('bcryptjs');
 const { some, omitBy, isNil } = require('lodash');
 const app = require('../../../index');
 const Customer = require('../../models/customer.model');
+const Transaction = require('../../models/transaction.model');
 const JWT_EXPIRATION = require('../../../config/vars').jwtExpirationInterval;
 
 /**
@@ -37,7 +38,7 @@ describe('Customers API', async () => {
   const password = '123456';
   const passwordHashed = await bcrypt.hash(password, 1);
 
-  beforeEach(async () => {    
+  beforeEach(async () => {
     dbCustomers = {
       masterAccount: {
         email: 'master_account@bank.com',
@@ -46,31 +47,40 @@ describe('Customers API', async () => {
         accountNumber: 1000,
         role: 'admin',
       },
+      mmucito: {
+        email: 'martin.mucito@gmail.com',
+        password,
+        balance: 500,
+        accountNumber: 1001,
+        name: 'Martín Mucito',
+      },
       jhonDoe: {
         email: 'jhondoe@gmail.com',
         password: passwordHashed,
+        balance: 10000,
         accountNumber: 1003,
         name: 'Jhon Doe',
       },
     };
 
     customer = {
-      email: 'martin.mucito@gmail.com',
+      email: 'usertesting2@gmail.com',
       password,
-      accountNumber: 1001,
-      name: 'Martín Mucito',
+      accountNumber: 1002,
+      name: 'User Testing',
     };
 
     admin = {
       email: 'master_account2@bank.com',
       password,
-      name: 'Master Account',
+      name: 'Master Account Testing',
       accountNumber: 999,
       role: 'admin',
     };
 
     await Customer.remove({});
-    await Customer.insertMany([dbCustomers.masterAccount, dbCustomers.jhonDoe]);
+    await Transaction.remove({});
+    await Customer.insertMany([dbCustomers.masterAccount, dbCustomers.jhonDoe, dbCustomers.mmucito]);
     dbCustomers.masterAccount.password = password;
     dbCustomers.jhonDoe.password = password;
     adminAccessToken = (await Customer.findAndGenerateToken(dbCustomers.masterAccount)).accessToken;
@@ -186,7 +196,7 @@ describe('Customers API', async () => {
           res.body[1].createdAt = new Date(res.body[1].createdAt);
 
           expect(res.body).to.be.an('array');
-          expect(res.body).to.have.lengthOf(2);
+          expect(res.body).to.have.lengthOf(3);
           expect(includesmasterAccount).to.be.true;
           expect(includesjhonDoe).to.be.true;
         });
@@ -494,7 +504,7 @@ describe('Customers API', async () => {
         .then(() => request(app).get('/v1/customers'))
         .then(async () => {
           const customers = await Customer.find({});
-          expect(customers).to.have.lengthOf(1);
+          expect(customers).to.have.lengthOf(2);
         });
     });
 
@@ -526,6 +536,7 @@ describe('Customers API', async () => {
   describe('GET /v1/customers/profile', () => {
     it('should get the logged customer\'s info', () => {
       delete dbCustomers.jhonDoe.password;
+      delete dbCustomers.jhonDoe.balance;
 
       return request(app)
         .get('/v1/customers/profile')
@@ -555,4 +566,107 @@ describe('Customers API', async () => {
         });
     });
   });
+
+
+  describe('GET /v1/ewallet/balance', () => {
+    it('should get the logged customer\'s balance', () => {
+      delete dbCustomers.jhonDoe.password;
+      dbCustomers.jhonDoe.balance = 10000;
+
+      return request(app)
+        .get('/v1/ewallet/balance')
+        .set('Authorization', `Bearer ${customerAccessToken}`)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.body).to.include(dbCustomers.jhonDoe);
+        });
+    });
+  });
+
+
+  describe('POST /v1/ewallet/deposit', () => {
+    it('should make a deposit to the the customer\'s account', () => {      
+      const depositRequest = {
+        amount: 10000,
+        card: '4111111111111111',
+      };
+      
+      return request(app)
+        .post('/v1/ewallet/deposit')
+        .set('Authorization', `Bearer ${customerAccessToken}`)
+        .send(depositRequest)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.body).that.includes.all.keys([ 'customer', 'transaction'])
+        });
+    });
+
+
+    it('should fail to make a deposit to the the customer\'s account', () => {    
+      const depositRequest = {
+        amount: 10000,
+        card: '4242424242424242',
+      };     
+
+      return request(app)
+        .post('/v1/ewallet/deposit')
+        .set('Authorization', `Bearer ${customerAccessToken}`)
+        .send(depositRequest)
+        .expect(httpStatus.PAYMENT_REQUIRED)
+        .then((res) => {
+          expect(res.body.code).to.be.equal(httpStatus.PAYMENT_REQUIRED);
+        });
+    });    
+  });  
+
+  describe('POST /v1/ewallet/transfer', () => {
+    it('should make a transfer to another customer\'s account', () => {    
+      const callRequest = {
+        amount: 1000,
+        destinationAccountNumber: 1001,
+      };
+
+      return request(app)
+        .post('/v1/ewallet/transfer')
+        .set('Authorization', `Bearer ${customerAccessToken}`)
+        .send(callRequest)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.body).that.includes.all.keys([ 'customer', 'transaction'])
+        });
+    });
+  });
+
+  describe('POST /v1/ewallet/withdrawal', () => {
+    it('should make a withdrawal from the customer\'s account to their debit card', () => {      
+      const callRequest = {
+        amount: 1000,
+        card: '4111111111111111',
+      };
+      
+      return request(app)
+        .post('/v1/ewallet/withdrawal')
+        .set('Authorization', `Bearer ${customerAccessToken}`)
+        .send(callRequest)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.body).that.includes.all.keys([ 'customer', 'transaction'])
+        });
+    });
+  });
+  
+
+  describe('GET /v1/ewallet/transactions', () => {
+    it('should get all transactions from the customer\'s account', () => {
+      return request(app)
+        .get('/v1/ewallet/transactions')
+        .set('Authorization', `Bearer ${customerAccessToken}`)
+        .expect(httpStatus.OK)
+        .then(async (res) => {
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(0);          
+        });
+    });
+  });
+
 });
