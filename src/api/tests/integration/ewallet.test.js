@@ -28,7 +28,7 @@ async function format(customer) {
   return omitBy(dbCustomer, isNil);
 }
 
-describe('Customers API', async () => {
+describe('eWallet API', async () => {
   let adminAccessToken;
   let customerAccessToken;
   let dbCustomers;
